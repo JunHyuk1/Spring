@@ -49,6 +49,11 @@
 			
 			<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
 					<property name="alwaysUseFullPath" value="true" />
+					<property name="interceptors">
+		 				<list>
+		 						<ref bean="eventExpirationCheckInterceptor" />
+		 				</list>
+		 		</property>
 			</bean>
 			
 			<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
@@ -67,4 +72,58 @@
 		 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
 		 	
 		 	<bean class="oct18.ReportSubmissionController" />
-		</beans>
+		 	
+		 	<bean class="oct19.QueryLogController" />
+		 	
+			<bean id="eventExpirationCheckInterceptor" class="oct19.EventExpirationCheckInterceptor" />
+			
+			 <!-- <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+					<property name="interceptors">
+						<list>
+								<ref bean="interceptor1"/>
+								<ref bean="interceptor2"/>
+								<ref bean="interceptor3"/>
+						</list>
+					</property>
+			</bean> -->
+			
+			<bean class="oct19.EventController" />
+			
+			<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+				<property name="alwaysUseFullPath" value="true" />
+				<property name="interceptors">
+					<list>
+							<ref bean="eventExpirationCheckInterceptor" />
+					</list>
+				</property>
+			</bean>
+			
+		<bean class="oct19.ArithmeticOperatorController" />
+		
+			<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+					<property name="exceptionMappings">
+						<props>
+								<prop key="java.lang.ArithmeticException">
+										event/mathException
+								</prop>
+								<prop key="java.lang.Exception">
+										event/exception
+								</prop>
+						</props>
+					</property>
+			</bean>
+			
+			
+   	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+   		<property name="cacheSeconds" value="0"/>
+   		<property name="alwaysUseFullPath" value="true"/>
+   		<property name="webBindingInitializer">
+   			<bean class="oct19.CustomWebBindingInitializer"/>
+   		</property>
+   	</bean>
+   	
+   	<bean id="webProfileBean" class="oct19.ProfileFilter"
+   			p:commonLogger-ref="commonLogger" />
+   		
+			
+	</beans>
